@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+  <head>
+    <title>Buy cool new product</title>
+    {% block css %}
+        <link rel="stylesheet"  href="{% static 'css/styles.css' %}">
+    {% endblock %}
+    
+    <script type="text/javascript">
+        const csrftoken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+
+        // Create an instance of the Stripe object with your publishable API key
+        var stripe = Stripe("{{ pk_test_51Ony1vLzuIIGxeVeYoE7Y6RDi0toDJ5ItjVPj1WQqxBqTKr3Vy2bMXvWfpV5OASImM6b7UooExISm8bIvr0SONQl00LPjIKnPU }}");
+        var checkoutButton = document.getElementById("checkout-button");
+
+        checkoutButton.addEventListener("click", function (event) {
+            event.preventDefault();
+
+            fetch("{% url 'create-checkout-session' product.id %}", {
+                method: "POST",
+                headers: { "X-CSRFToken": csrftoken },
+            })
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (session) {
+                return stripe.redirectToCheckout({ sessionId: session.id });
+            })
+            .then(function (result) {
+                if (result.error) {
+                    alert(result.error.message);
+                }
+            })
+            .catch(function (error) {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+
+  </head>
+  <body>
+    <section>
+      <div class="product">
+        <img src="https://i.imgur.com/EHyR2nP.png" alt="The cover of Stubborn Attachments" />
+        <div class="description">
+          <h3>{{  product.name}}</h3>
+          <h5>{{ product.get_display_price }}</h5>
+        </div>
+      </div>
+{#      <form id="checkout-form">#}
+{#        {% csrf_token %}#}
+{#        <button type="submit" id="checkout-button">Checkout</button>#}
+{#      </form>#}
+        <form action="/create-checkout-session/{{ product.id }}" method="post">
+            {% csrf_token %}
+            <button type="submit" id="checkout-button">Checkout</button>
+        </form>
+    </section>
+    {% csrf_token %}
+  </body>
+</html>
+
+
