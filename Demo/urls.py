@@ -15,12 +15,25 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from product.views import (CreateCheckoutSessionView,ProductLandingPageView,SuccessView,CancelView)
+from django.http import HttpResponse
+from product.views import (
+    CreateCheckoutSessionView,
+    ProductLandingPageView,
+    SuccessView,
+    CancelView,
+    stripe_webhook,  # Updated to the correct function name based on views.py
+    StripeIntentView,
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', ProductLandingPageView.as_view(), name='landing-page'),
+    path('create-payment-intent/<int:pk>/', StripeIntentView.as_view(), name='create-payment-intent'),
+    path('create-checkout-session/<int:pk>/', CreateCheckoutSessionView.as_view(), name='create-checkout-session'),
     path('success/', SuccessView.as_view(), name='success'),
     path('cancel/', CancelView.as_view(), name='cancel'),
-    path('create-checkout-session/<pk>', CreateCheckoutSessionView.as_view(), name='create-checkout-session')
+    path('stripe-webhook/', stripe_webhook, name='stripe-webhook'),  # Ensure this matches the function name in views.py
+    # Removed the duplicate 'stripe-webhook/' path for clarity and correctness.
+    path('test/', lambda request: HttpResponse("Test page works!"), name='test'),
 ]
+

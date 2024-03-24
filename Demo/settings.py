@@ -102,6 +102,10 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'desaipoojan2001@gmail.com'
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
@@ -118,6 +122,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
+APPEND_SLASH = False
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -127,5 +133,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STRIPE_PUBLIC_KEY = "pk_test_51Ony1vLzuIIGxeVeYoE7Y6RDi0toDJ5ItjVPj1WQqxBqTKr3Vy2bMXvWfpV5OASImM6b7UooExISm8bIvr0SONQl00LPjIKnPU"
 STRIPE_SECRET_KEY = "sk_test_51Ony1vLzuIIGxeVe1sIvdas1vfPYs7cFDseV11K3OA9g6EXwssGXg2n4e92bt0hPXgvKwbrEu4Bnl3qPOfgmkuNy00QeCV5TgP"
-STRIPE_WEBHOOK_SECRET = ""
+STRIPE_WEBHOOK_SECRET = "whsec_51794653e90d73e73d15dcc2d0089a112c49cb4a1349b2ab4ffa0ccd224fd081"
+
 
